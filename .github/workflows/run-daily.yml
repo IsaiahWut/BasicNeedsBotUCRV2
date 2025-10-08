@@ -1,0 +1,47 @@
+name: Run Selenium Bot Daily
+
+on:
+  schedule:
+    - cron: '0 18 * * *'  # 11 AM Pacific
+  workflow_dispatch: # allows manual trigger
+
+permissions:
+  contents: write  # needed to update run_log.txt
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install Chrome & ChromeDriver
+        run: |
+          sudo apt update
+          sudo apt install -y chromium-browser chromium-chromedriver
+          sudo ln -s /usr/bin/chromedriver /usr/local/bin/chromedriver
+
+      - name: Run bot with weekly limit
+        env:
+          FULL_NAME: ${{ secrets.FULL_NAME }}
+          PHONE: ${{ secrets.PHONE }}
+          EMAIL: ${{ secrets.EMAIL }}
+        run: python main.py
+
+      - name: Commit updated log
+        run: |
+          if [[ `git status --porcelain` ]]; then
+            git config --global user.name "github-actions"
+            git config --global user.email "actions@github.com"
+            git add run_log.txt
+            git commit -m "Update run log [skip ci]"
+            git push
+          fi
