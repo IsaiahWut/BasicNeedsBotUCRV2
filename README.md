@@ -78,6 +78,11 @@ git commit -m "Set up scheduled scraper with weekly limit"
 git push origin main
 ```
 
+## 📜 License
+
+This project is licensed under the MIT License
+.
+
 
 Enable GitHub Actions
 
