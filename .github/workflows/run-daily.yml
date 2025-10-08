@@ -2,7 +2,7 @@ name: Run Selenium Bot Daily
 
 on:
   schedule:
-    - cron: '0 18 * * *'  # 11 AM Pacific
+    - cron: '17 18 * * *'  
   workflow_dispatch: # allows manual trigger
 
 permissions:
