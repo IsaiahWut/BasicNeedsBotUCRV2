@@ -2,6 +2,8 @@ import os
 import time
 import datetime
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -42,12 +44,14 @@ def log_run():
         f.write(now + "\n")
 
 def run_bot():
-    options = webdriver.ChromeOptions()
-    options.add_argument("--headless")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
+    options = Options()
+    options.binary_location = "/usr/bin/chromium-browser"  
+    options.add_argument("--headless")  
+    options.add_argument("--no-sandbox")  
+    options.add_argument("--disable-dev-shm-usage")  
 
-    driver = webdriver.Chrome(options=options)
+    driver = webdriver.Chrome(service=Service("/usr/bin/chromedriver"), options=options)
+
     driver.get("https://waitwhile.com/locations/basicneeds/welcome?registration=waitlist")
 
     WebDriverWait(driver, 10).until(
